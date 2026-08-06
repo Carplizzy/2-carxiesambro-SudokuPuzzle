@@ -35,16 +35,27 @@ class board
       bool isBlank(int, int);
       ValueType getCell(int, int);
       
+      //
+      void setCell(int, int, ValueType);
+      void clearCell(int, int);
+      void printConflicts();
+
    private:
 
       // The following matrices go from 1 to BoardSize in each
       // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
 
       matrix<ValueType> value;
-};
+      matrix<bool> rowConflicts;
+      matrix<bool> colConflicts;
+      matrix<bool> squareConflicts;
+   };
 
 board::board(int sqSize)
-   : value(BoardSize+1,BoardSize+1)
+   : value(BoardSize+1,BoardSize+1),
+   rowConflicts(BoardSize+1, MaxValue+1, false),
+   colConflicts(BoardSize+1, MaxValue+1, false),
+   squareConflicts(BoardSize+1, MaxValue+1, false)
 // Board constructor
 {
    clear();
@@ -58,6 +69,14 @@ void board::clear()
       {
          value[i][j] = Blank;
       }
+      
+   for (int i = 1; i <= BoardSize; i++)
+      for (int v = 1; v <= MaxValue; v++)
+      {
+         rowConflicts[i][v]=false;
+         colConflicts[i][v]=false;
+         squareConflicts[i][v]=false;
+      }        
 }
 
 void board::initialize(ifstream &fin)
@@ -93,7 +112,8 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
 {
    for (int i = 0; i < v.size(); i++)
       ostr << v[i] << " ";
-   cout << endl;
+   ostr << endl;
+   return ostr;
 }
 
 ValueType board::getCell(int i, int j)
@@ -110,7 +130,7 @@ bool board::isBlank(int i, int j)
 // Returns true if cell i,j is blank, and false otherwise.
 {
    if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
-      throw rangeError("bad value in setCell");
+      throw rangeError("bad value in getCell");
 
    return (getCell(i,j) == Blank);
 }
@@ -148,12 +168,57 @@ void board::print()
    cout << endl;
 }
 
+void board::setCell(int i, int j, ValueType val){
+   //checks i and j are in range
+   if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
+      throw rangeError("bad value in getCell");
+   
+   //checks if input is in range (1-9)
+   if (val < MinValue || val > MaxValue)
+      throw rangeError("bad value in getCell");
+   //if the cell is not blank clear it
+   if (!isBlank(i,j))
+      clearCell(i,j);
+
+   //store value and decrement cell
+   value[i][j] = val;
+   rowConflicts[i][val] = true;
+   colConflicts[j][val] = true;
+   squareConflicts[squareNumber(i,j)][val] = true;
+   }
+
+void board::clearCell(int i, int j)
+{
+   //if not in board range then throw error
+   if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
+      throw rangeError("bad value in getCell");
+   
+   //if already blank return
+   if (isBlank(i,j))
+      return;
+
+   //store value and decrements each row col and square
+   ValueType val = value[i][j];
+
+   rowConflicts[i][val]==false;
+   colConflicts[j][val]==false;
+   squareConflicts[squareNumber(i,j)][val]==false;
+
+   //erase the cell
+   value[i][j] = Blank;
+}
+
+void board::printConflicts()
+{
+;//nothing
+}
+
 int main()
 {
    ifstream fin;
    
    // Read the sample grid from the file.
-   string fileName = "sudoku.txt";
+   string fileName = "sudoku1.txt";
 
    fin.open(fileName.c_str());
    if (!fin)
@@ -179,3 +244,4 @@ int main()
       exit(1);
    }
 }
+
