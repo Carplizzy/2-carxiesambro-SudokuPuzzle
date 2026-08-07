@@ -1,1 +1,28 @@
-# 2-carxiesambro-SudokuPuzzle
+# 2-carxiesambro-SudokuPuzzle Part A
+## Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
+
+## Sudoku Puzzle Part A Project Description
+This project implements the foundation for a Sudoku puzzle solver. The program
+reads Sudoku puzzles from an input file, stores the puzzle in a 9x9 board,
+maintains row, column and 3x3 square conflict information using the Improved
+Conflict Counts Approach, prints the board and conflicts. It also checks whether
+the puzzle has been solved.
+
+## Build Instructions 
+Compile the project using: 
+```bash
+make
+```
+To remove object files:
+```bash
+make clean
+```
+## Run Instructions 
+```bash
+./sudoku
+```
+
+## Notes
+The files d_matrix.h and d_except.h were provided by the course instructor and were not
+modified by our team. 
+EOF 
