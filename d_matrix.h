@@ -1,7 +1,7 @@
 // EECE 2560: Sudoku Puzzle Part A
 // Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 // This file was provided by the course instructor. It contains the matrix
-// template class used to store the Sudoku board and conflict matrics. 
+// template class used to store the Sudoku board and conflict matrices. 
 // No modification were made by our team.
 
 #ifndef MATRIX_CLASS
