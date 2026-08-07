@@ -35,10 +35,11 @@ class board
       bool isBlank(int, int);
       ValueType getCell(int, int);
       
-      //
+      
       void setCell(int, int, ValueType);
       void clearCell(int, int);
       void printConflicts();
+      bool isSolved();
 
    private:
 
@@ -130,7 +131,7 @@ bool board::isBlank(int i, int j)
 // Returns true if cell i,j is blank, and false otherwise.
 {
    if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
-      throw rangeError("bad value in getCell");
+      throw rangeError("bad value in isBlank");
 
    return (getCell(i,j) == Blank);
 }
@@ -171,11 +172,11 @@ void board::print()
 void board::setCell(int i, int j, ValueType val){
    //checks i and j are in range
    if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
-      throw rangeError("bad value in getCell");
+      throw rangeError("bad value in setCell");
    
    //checks if input is in range (1-9)
    if (val < MinValue || val > MaxValue)
-      throw rangeError("bad value in getCell");
+      throw rangeError("bad value in setCell");
    //if the cell is not blank clear it
    if (!isBlank(i,j))
       clearCell(i,j);
@@ -191,7 +192,7 @@ void board::clearCell(int i, int j)
 {
    //if not in board range then throw error
    if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
-      throw rangeError("bad value in getCell");
+      throw rangeError("bad value in clearCell");
    
    //if already blank return
    if (isBlank(i,j))
@@ -199,10 +200,11 @@ void board::clearCell(int i, int j)
 
    //store value and decrements each row col and square
    ValueType val = value[i][j];
-
-   rowConflicts[i][val]==false;
-   colConflicts[j][val]==false;
-   squareConflicts[squareNumber(i,j)][val]==false;
+   
+   //remove the value from the row, column and square
+   rowConflicts[i][val]=false;
+   colConflicts[j][val]=false;
+   squareConflicts[squareNumber(i,j)][val]=false;
 
    //erase the cell
    value[i][j] = Blank;
@@ -210,7 +212,81 @@ void board::clearCell(int i, int j)
 
 void board::printConflicts()
 {
-;//nothing
+   //print the conflict information
+   cout << "Row Conflicts: " << endl; 
+
+   for (int i = 1; i <= BoardSize; i++)
+   {
+      //print the current row number
+      cout << "Row " << i << ": ";
+
+      //print all digits that have been placed in this row
+      for (int v = MinValue; v <= MaxValue; v++)
+      {
+         if (rowConflicts[i][v])
+             cout << v << " ";
+   
+      }
+    
+      cout << endl; 
+   }
+
+   cout << "Column Conflicts: " << endl; 
+
+   for (int j = 1; j <= BoardSize; j++)
+   {
+      //print the current column nuumber
+      cout << "column " << j << ": ";
+
+      //print all digits that have been placed in this column
+      for (int v = MinValue; v <= MaxValue; v ++)
+      {
+         if (colConflicts[j][v])
+         cout << v << " ";
+
+      }
+
+      cout << endl; 
+   }
+
+   //print the conflict information for each 3x3 square
+   cout << "Square Conflicts: " << endl;
+
+   for (int s = 1; s <= BoardSize; s++)
+   {
+      //print the current square number
+      cout << "Square " << s << ": ";
+
+      //print all digits that have been placed in this square
+      for (int v = MinValue; v <= MaxValue; v++)
+      {
+         if (squareConflicts[s][v])
+            cout << v << " "; 
+      }
+      cout << endl; 
+   }
+} 
+
+bool board::isSolved() 
+{ 
+   //Check every cell on the board 
+   for (int i = 1; i <= BoardSize; i++)
+   {
+      for (int j = 1; j <= BoardSize; j++)
+      {
+
+         //if any cell is blank, the board is not solved 
+         if (isBlank(i, j))
+         {
+            cout << "Board is NOT solved." << endl; 
+            return false;
+         } 
+      }
+   }
+
+   //all cells have been filled 
+   cout << "Board is solved." << endl;
+   return true;
 }
 
 int main()
@@ -233,9 +309,11 @@ int main()
 
       while (fin && fin.peek() != 'Z')
       {
-	 b1.initialize(fin);
-	 b1.print();
-	 b1.printConflicts();
+          b1.initialize(fin);
+          b1.print();
+          b1.printConflicts();
+          b1.isSolved();
+
       }
    }
    catch  (indexRangeError &ex)
