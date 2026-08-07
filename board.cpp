@@ -187,7 +187,7 @@ void board::setCell(int i, int j, ValueType val)
    if (!isBlank(i, j))
       clearCell(i, j);
 
-   // store value and decrement cell
+   // store value and update conflicts
    value[i][j] = val;
    rowConflicts[i][val] = true;
    colConflicts[j][val] = true;
@@ -204,7 +204,7 @@ void board::clearCell(int i, int j)
    if (isBlank(i, j))
       return;
 
-   // store value and decrements each row col and square
+   // store value and updates each row col and square
    ValueType val = value[i][j];
 
    // remove the value from the row, column and square
@@ -212,7 +212,7 @@ void board::clearCell(int i, int j)
    colConflicts[j][val] = false;
    squareConflicts[squareNumber(i, j)][val] = false;
 
-   // erase the cell
+   // clear the cell
    value[i][j] = Blank;
 }
 
@@ -240,8 +240,8 @@ void board::printConflicts()
 
    for (int j = 1; j <= BoardSize; j++)
    {
-      // print the current column nuumber
-      cout << "column " << j << ": ";
+      // print the current column number
+      cout << "Column " << j << ": ";
 
       // print all digits that have been placed in this column
       for (int v = MinValue; v <= MaxValue; v++)
