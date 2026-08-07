@@ -1,3 +1,8 @@
+// EECE 2560: Sudoku Puzzle Part A
+// Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
+// This file was provided by the course instructor. It contains the exception classes used 
+// throughout the Sudoku project. No modifications were made by our team. 
+
 #ifndef EXCEPTION_CLASSES
 #define EXCEPTION_CLASSES
 
