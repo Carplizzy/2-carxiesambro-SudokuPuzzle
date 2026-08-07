@@ -6,4 +6,4 @@ sudoku: board.cpp d_matrix.h d_except.h
   g++ -Wall -Wextra board.cpp -o sudoku
 
 clean: 
-   rm -f sudoku
+  rm -f sudoku
