@@ -1,3 +1,11 @@
+// EECE 2560: Sudoku Puzzle Part A
+// Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
+// Implementation file for the Sudoku board class. Read Sudoku puzzles from an input file,
+// stores the board, maintains row, column and 3x3 square conflict information
+// using the Improved Conflict Counts Approach, prints the board and conflicts
+// and check whether the board is solved. 
+
+
 // Declarations and functions for project #4
 
 #include <iostream>
