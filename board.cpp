@@ -292,14 +292,18 @@ bool board::isSolved()
    return true;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+   // Pull the filepath from the first argument supplied
+   const char* FILE_NAME = argv[1];
+
    ifstream fin;
 
    // Read the sample grid from the file.
-   string fileName = "sudoku1.txt";
+   string fileName = FILE_NAME;
 
    fin.open(fileName.c_str());
+
    if (!fin)
    {
       cerr << "Cannot open " << fileName << endl;
