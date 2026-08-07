@@ -25,4 +25,4 @@ make clean
 ## Notes
 The files d_matrix.h and d_except.h were provided by the course instructor and were not
 modified by our team. 
-EOF 
+
