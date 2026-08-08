@@ -294,39 +294,47 @@ bool board::isSolved()
 
 int main(int argc, char* argv[])
 {
-   // Pull the filepath from the first argument supplied
-   const char* FILE_NAME = argv[1];
-
-   ifstream fin;
-
-   // Read the sample grid from the file.
-   string fileName = FILE_NAME;
-
-   fin.open(fileName.c_str());
-
-   if (!fin)
+   //Check that a Sudoku file was prov ided 
+   if (argc < 2)
    {
-      cerr << "Cannot open " << fileName << endl;
-      exit(1);
+      cerr << "Usage: ./sudoku <input file> " << endl;
+      return 1; 
    }
 
-   try
-   {
-      board b1(SquareSize);
+   ifstream fin; 
 
+   //Get the input filename from the command line
+   string fileName = argv[1]; 
+
+   fin.open(fileName.c_str()); 
+
+   //Check that the file opened successfully 
+   if (!fin)
+   { 
+      cerr << "Cannot open " << fileName << endl;
+      return 1; 
+   }
+   
+   try 
+   {
+      board b1(SquareSize); 
+
+      //Read and process each Sudoku board in the input file 
       while (fin && fin.peek() != 'Z')
       {
-         b1.initialize(fin);
+         b1.initialize(fin); 
          b1.print();
-         b1.printConflicts();
+         b1.printConflicts(); 
          b1.isSolved();
       }
    }
-   catch (indexRangeError& ex)
+   catch (indexRangeError &ex)
    {
-      cout << ex.what() << endl;
-      exit(1);
-   }
-}
+      cout << ex.what() << endl; 
+      return 1;
 
+   }
+
+   return 0;
+}
 
