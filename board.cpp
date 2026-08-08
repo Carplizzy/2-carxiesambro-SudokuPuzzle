@@ -16,20 +16,15 @@
 
 using namespace std;
 
+// Global Types and Variables
+
 typedef int ValueType; // The type of the value in a cell
-const int Blank = -1;  // Indicates that a cell is blank
+int numSolutions = 0;
 
 const int SquareSize = 3; //  The number of cells in a small square
-                          //  (usually 3).  The board has
-                          //  SquareSize^2 rows and SquareSize^2
-                          //  columns.
-
-const int BoardSize = SquareSize * SquareSize;
-
-const int MinValue = 1;
-const int MaxValue = 9;
-
-int numSolutions = 0;
+                           //  (usually 3).  The board has
+                           //  SquareSize^2 rows and SquareSize^2
+                           //  columns.
 
 class board
 // Stores the entire Sudoku board
@@ -48,9 +43,15 @@ class board
    bool isSolved();
 
  private:
+   // static options
+   static const int Blank = -1;  // Indicates that a cell is blank
+
+   static const int MinValue = 1;
+   static const int MaxValue = 9;
    // The following matrices go from 1 to BoardSize in each
    // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
 
+   int BoardSize;
    matrix<ValueType> value;
    matrix<bool> rowConflicts;
    matrix<bool> colConflicts;
@@ -58,7 +59,8 @@ class board
 };
 
 board::board(int sqSize)
-    : value(BoardSize + 1, BoardSize + 1),
+    : BoardSize(sqSize * sqSize),
+      value(BoardSize + 1, BoardSize + 1),
       rowConflicts(BoardSize + 1, MaxValue + 1, false),
       colConflicts(BoardSize + 1, MaxValue + 1, false),
       squareConflicts(BoardSize + 1, MaxValue + 1, false)
@@ -187,7 +189,7 @@ void board::setCell(int i, int j, ValueType val)
    if (!isBlank(i, j))
       clearCell(i, j);
 
-   // store value and update conflicts
+   // store value and decrement cell
    value[i][j] = val;
    rowConflicts[i][val] = true;
    colConflicts[j][val] = true;
@@ -204,7 +206,7 @@ void board::clearCell(int i, int j)
    if (isBlank(i, j))
       return;
 
-   // store value and updates each row col and square
+   // store value and decrements each row col and square
    ValueType val = value[i][j];
 
    // remove the value from the row, column and square
@@ -212,7 +214,7 @@ void board::clearCell(int i, int j)
    colConflicts[j][val] = false;
    squareConflicts[squareNumber(i, j)][val] = false;
 
-   // clear the cell
+   // erase the cell
    value[i][j] = Blank;
 }
 
@@ -240,8 +242,8 @@ void board::printConflicts()
 
    for (int j = 1; j <= BoardSize; j++)
    {
-      // print the current column number
-      cout << "Column " << j << ": ";
+      // print the current column nuumber
+      cout << "column " << j << ": ";
 
       // print all digits that have been placed in this column
       for (int v = MinValue; v <= MaxValue; v++)
@@ -292,49 +294,48 @@ bool board::isSolved()
    return true;
 }
 
+// For this program we'll use c-style arguments to pass sudoku board file name
 int main(int argc, char* argv[])
 {
-   //Check that a Sudoku file was prov ided 
-   if (argc < 2)
-   {
-      cerr << "Usage: ./sudoku <input file> " << endl;
-      return 1; 
+   if (argc == 0) {
+      cerr << "Must Supply a File Path" << endl;
+      exit(1);
    }
+   // Pull the filepath from the first argument supplied
+   const char* FILE_NAME = argv[1];
 
-   ifstream fin; 
+   ifstream fin;
 
-   //Get the input filename from the command line
-   string fileName = argv[1]; 
+   // Read the sample grid from the file.
+   string fileName = FILE_NAME;
 
-   fin.open(fileName.c_str()); 
+   fin.open(fileName.c_str());
 
-   //Check that the file opened successfully 
    if (!fin)
-   { 
-      cerr << "Cannot open " << fileName << endl;
-      return 1; 
-   }
-   
-   try 
    {
-      board b1(SquareSize); 
+      cerr << "Cannot open " << fileName << endl;
+      exit(1);
+   }
 
-      //Read and process each Sudoku board in the input file 
+   // Catches file-read exceptions in order to display to console
+   try
+   {
+      board b1(SquareSize);
+      
+      // 'Z' is termination character in txt file
       while (fin && fin.peek() != 'Z')
       {
-         b1.initialize(fin); 
+         b1.initialize(fin);
          b1.print();
-         b1.printConflicts(); 
+         b1.printConflicts();
          b1.isSolved();
       }
    }
-   catch (indexRangeError &ex)
+   catch (indexRangeError& ex)
    {
-      cout << ex.what() << endl; 
-      return 1;
-
+      cout << ex.what() << endl;
+      exit(1);
    }
-
-   return 0;
 }
+
 
