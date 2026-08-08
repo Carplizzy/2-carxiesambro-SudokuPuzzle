@@ -18,9 +18,16 @@ To remove object files:
 make clean
 ```
 ## Run Instructions 
+The program requires the Sudoku input filename as a command-line argument. 
+To run the program with sudoku1.txt: 
+
 ```bash
-./sudoku
+./sudoku sudoku1.txt
 ```
+Other input files can be used in the same way: 
+
+./sudoku sudoku2.txt
+./sudoku sudoku3.txt
 
 ## Notes
 The files d_matrix.h and d_except.h were provided by the course instructor and were not
