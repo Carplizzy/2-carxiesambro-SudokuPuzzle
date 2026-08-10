@@ -1,9 +1,14 @@
-// EECE 2560: Sudoku Puzzle Part A
+// EECE 2560: Sudoku Puzzle Part B
 // Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 // Implementation file for the Sudoku board class. Read Sudoku puzzles from an
 // input file, stores the board, maintains row, column and 3x3 square conflict
-// information using the Improved Conflict Counts Approach, prints the board and
-// conflicts and check whether the board is solved.
+// information using the Improved Conflict Counts Approach, prints the board
+// and conflicts, and checks whether the board is solved. It implements a
+// recursive backtracking solver that uses recursive backtracking to locate
+// blank cells and check legal digit placement using conflict matrices. The
+// solver counts all recursive calls, prints each solved puzzle, and reports
+// the total and average recursion counts across all puzzles in the input file.
+// The solver finds exactly one solution and does not use exit. 
 
 // Declarations and functions for project #4
 
@@ -25,6 +30,7 @@ const int SquareSize = 3; //  The number of cells in a small square
                            //  (usually 3).  The board has
                            //  SquareSize^2 rows and SquareSize^2
                            //  columns.
+int numsolutions = 0;      // Keep track of number of solutions per board
 
 class board
 // Stores the entire Sudoku board
@@ -40,7 +46,9 @@ class board
    void setCell(int, int, ValueType);
    void clearCell(int, int);
    void printConflicts();
-   bool isSolved();
+
+   bool findNextBlank(int &i, int &j);
+   bool isLegal(int i, int j, ValueType val);
 
  private:
    // static options
