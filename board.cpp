@@ -49,6 +49,8 @@ class board
 
    bool findNextBlank(int &i, int &j);
    bool isLegal(int i, int j, ValueType val);
+   bool solve();
+   long long getRecursiveCalls() const;
 
  private:
    // static options
@@ -64,6 +66,8 @@ class board
    matrix<bool> rowConflicts;
    matrix<bool> colConflicts;
    matrix<bool> squareConflicts;
+
+   long long recursiveCalls = 0; // Counts number of recursions
 };
 
 board::board(int sqSize)
@@ -93,6 +97,7 @@ void board::clear()
          colConflicts[i][v] = false;
          squareConflicts[i][v] = false;
       }
+  recursiveCalls = 0; // Reset recursion counter
 }
 
 void board::initialize(ifstream& fin)
@@ -281,31 +286,92 @@ void board::printConflicts()
    }
 }
 
-bool board::isSolved()
+// bool board::isSolved()
+// {
+//    // Check every cell on the board
+//    for (int i = 1; i <= BoardSize; i++)
+//    {
+//       for (int j = 1; j <= BoardSize; j++)
+//       {
+//          // if any cell is blank, the board is not solved
+//          if (isBlank(i, j))
+//          {
+//             cout << "Board is NOT solved." << endl;
+//             return false;
+//          }
+//       }
+//    }
+
+//    // all cells have been filled
+//    cout << "Board is solved." << endl;
+//    return true;
+// }
+
+//
+bool board::findNextBlank(int &i, int &j)
 {
-   // Check every cell on the board
-   for (int i = 1; i <= BoardSize; i++)
+   for(i = 1; i <=BoardSize; i++)
    {
-      for (int j = 1; j <= BoardSize; j++)
+      for(j = 1; j <= BoardSize; j++)
       {
-         // if any cell is blank, the board is not solved
-         if (isBlank(i, j))
+         if(isBlank(i, j))
          {
-            cout << "Board is NOT solved." << endl;
-            return false;
+            return true;
          }
       }
    }
+  
+   return false;
+}
 
-   // all cells have been filled
-   cout << "Board is solved." << endl;
-   return true;
+// 
+bool board::isLegal(int i, int j, ValueType val)
+{
+   return !rowConflicts[i][val] && 
+          !colConflicts[j][val] && 
+          !squareConflicts[squareNumber(i, j)][val];
+}
+
+//
+bool board::solve()
+{
+   recursiveCalls++; // Starts the recursion count each time it calls itself
+   int i, j;
+
+   if(!findNextBlank(i, j))
+   {
+      return true;
+   }
+
+   for(int val = MinValue; val <= MaxValue; val++)
+   {
+      if(isLegal(i, j, val))
+      {
+         setCell(i, j, val);
+
+         if(solve())
+         {
+            return true;
+         }
+        
+         clearCell(i, j);
+      }
+   }
+  
+   return false;
+}
+
+// 
+long long board::getRecursiveCalls() const
+{
+   return recursiveCalls;
 }
 
 // For this program we'll use c-style arguments to pass sudoku board file name
 int main(int argc, char* argv[])
 {
-   if (argc == 0) {
+   if (argc == 0) 
+   {
       cerr << "Must Supply a File Path" << endl;
       exit(1);
    }
@@ -329,15 +395,57 @@ int main(int argc, char* argv[])
    try
    {
       board b1(SquareSize);
+
+      long long totalCalls = 0;
+      int boardCount = 0;
       
       // 'Z' is termination character in txt file
       while (fin && fin.peek() != 'Z')
       {
+         cout << "\n========================\n";
+         cout << "Reading next board....\n";
+         cout << "==========================\n";
          b1.initialize(fin);
+
+         cout << "\nInitial Board:\n";
          b1.print();
+
+         cout << "\nConflicts:\n";
          b1.printConflicts();
-         b1.isSolved();
+
+         cout << "\nSolving...\n";
+         bool solved = b1.solve();
+
+         if(solved)
+         {
+            cout << "\nSolved Board:\n";
+            b1.print();
+            numSolutions++;
+         }
+         else
+         {
+            cout << "\nNo solution found.\n";
+         }
+
+         long long calls = b1.getRecursiveCalls();
+         cout << "Recursive calls for this board: " << calls << endl;
+
+         totalCalls += calls;
+         boardCount++;
       }
+
+      long long averageCalls;
+
+      if (boardCount > 0)
+          averageCalls = totalCalls / boardCount;
+      else
+          averageCalls = 0;
+      
+      cout << "\n========================\n";
+      cout << "Total boards solved: " << boardCount << endl;
+      cout << "Total recursive calls: " << totalCalls << endl;
+      cout << "Average recursive calls: " << averageCalls << endl;
+      cout << "========================\n";
    }
    catch (indexRangeError& ex)
    {
