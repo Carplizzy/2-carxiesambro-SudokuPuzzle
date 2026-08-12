@@ -284,28 +284,6 @@ void board::printConflicts()
    }
 }
 
-// bool board::isSolved()
-// {
-//    // Check every cell on the board
-//    for (int i = 1; i <= BoardSize; i++)
-//    {
-//       for (int j = 1; j <= BoardSize; j++)
-//       {
-//          // if any cell is blank, the board is not solved
-//          if (isBlank(i, j))
-//          {
-//             cout << "Board is NOT solved." << endl;
-//             return false;
-//          }
-//       }
-//    }
-
-//    // all cells have been filled
-//    cout << "Board is solved." << endl;
-//    return true;
-// }
-
-//
 bool board::findNextBlank(int &i, int &j)
 {
    // scan every cell on the board
