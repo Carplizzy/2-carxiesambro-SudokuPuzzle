@@ -27,10 +27,9 @@ To run the program with sudoku.txt:
 ```bash
 ./sudoku sudoku.txt
 ```
-Other input files can be used in the same way: 
+If you would like, a larger sudoku file can be used in the same way: 
 
-./sudoku sudoku2.txt
-./sudoku sudoku3.txt
+./sudoku sudoku1-3(1).txt
 
 ## Notes
 The files d_matrix.h and d_except.h were provided by the course instructor and were not
