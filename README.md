@@ -22,10 +22,10 @@ make clean
 ```
 ## Run Instructions 
 The program requires the Sudoku input filename as a command-line argument. 
-To run the program with sudoku1.txt: 
+To run the program with sudoku.txt: 
 
 ```bash
-./sudoku sudoku1.txt
+./sudoku sudoku.txt
 ```
 Other input files can be used in the same way: 
 
