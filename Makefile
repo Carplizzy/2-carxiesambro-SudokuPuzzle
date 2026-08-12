@@ -1,4 +1,4 @@
-#EECE 2560 Sudoku Part A
+#EECE 2560 Sudoku Part B
 #Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 #Sudoku Part A Carxiesambro Makefile
 
