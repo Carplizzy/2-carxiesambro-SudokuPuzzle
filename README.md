@@ -2,8 +2,8 @@
 ## Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 
 ## Sudoku Puzzle Part B Project Description
-This project extends the foundation for a Sudoku puzzle solver by implementing a complete recursive 
-backtracking solution. The program reads Sudoku puzzles from an input file, stores the puzzle in a 
+This project extends the foundation for a Sudoku puzzle solver by implementing recursive 
+backtracking. The program reads Sudoku puzzles from an input file, stores the puzzle in a 
 9x9 board, and maintains row, column and 3x3 square conflict information using the Improved
 Conflict Counts Approach. It prints the board and conflict data, locates blank cells, and checks 
 legal digit placement. The solver uses recursive backtracking to fill in all empty cells, counts 
