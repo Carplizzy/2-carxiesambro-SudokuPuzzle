@@ -24,13 +24,11 @@ using namespace std;
 // Global Types and Variables
 
 typedef int ValueType; // The type of the value in a cell
-int numSolutions = 0;
 
 const int SquareSize = 3; //  The number of cells in a small square
                            //  (usually 3).  The board has
                            //  SquareSize^2 rows and SquareSize^2
                            //  columns.
-int numsolutions = 0;      // Keep track of number of solutions per board
 
 class board
 // Stores the entire Sudoku board
@@ -310,10 +308,12 @@ void board::printConflicts()
 //
 bool board::findNextBlank(int &i, int &j)
 {
+   // scan every cell on the board
    for(i = 1; i <=BoardSize; i++)
    {
       for(j = 1; j <= BoardSize; j++)
       {
+         // return first blank cell found
          if(isBlank(i, j))
          {
             return true;
@@ -321,12 +321,13 @@ bool board::findNextBlank(int &i, int &j)
       }
    }
   
-   return false;
+   return false; // no blanks left on board
 }
 
-// 
 bool board::isLegal(int i, int j, ValueType val)
 {
+   // checks that the digit doesn't conflict in the same row, 
+   // column, or square
    return !rowConflicts[i][val] && 
           !colConflicts[j][val] && 
           !squareConflicts[squareNumber(i, j)][val];
@@ -335,41 +336,48 @@ bool board::isLegal(int i, int j, ValueType val)
 //
 bool board::solve()
 {
-   recursiveCalls++; // Starts the recursion count each time it calls itself
+   recursiveCalls++; // starts the recursion count each time it calls itself
    int i, j;
 
+   // if no blanks remain, puzzle is solved
    if(!findNextBlank(i, j))
    {
       return true;
    }
 
+   // go through all digits (1-9) for each box
    for(int val = MinValue; val <= MaxValue; val++)
    {
+      // check if placement is allowed
       if(isLegal(i, j, val))
       {
-         setCell(i, j, val);
+         setCell(i, j, val); // place digit
 
+         // recurse if puzzle not solved
+         // if the puzzle is solved, stop and return true
          if(solve())
          {
             return true;
          }
         
-         clearCell(i, j);
+         clearCell(i, j);    // undo placement
       }
    }
-  
+
+   // no valid digit here, so backtrack
    return false;
 }
 
-// 
 long long board::getRecursiveCalls() const
 {
+   // return total recursion count
    return recursiveCalls;
 }
 
 // For this program we'll use c-style arguments to pass sudoku board file name
 int main(int argc, char* argv[])
 {
+   // corrected requirement for filename argument
    if (argc < 2) 
    {
       cerr << "Must Supply a File Path" << endl;
@@ -391,7 +399,9 @@ int main(int argc, char* argv[])
       exit(1);
    }
 
-   // Catches file-read exceptions in order to display to console
+   // Process all boards in the file: read one, show it,
+   // solve it, print solution, track recursive calls,
+   // then move to the next until 'Z' is reached
    try
    {
       board b1(SquareSize);
@@ -402,9 +412,7 @@ int main(int argc, char* argv[])
       // 'Z' is termination character in txt file
       while (fin && fin.peek() != 'Z')
       {
-         cout << "\n========================\n";
-         cout << "Reading next board....\n";
-         cout << "==========================\n";
+         cout << "\nReading next board....\n";
          b1.initialize(fin);
 
          cout << "\nInitial Board:\n";
@@ -420,20 +428,20 @@ int main(int argc, char* argv[])
          {
             cout << "\nSolved Board:\n";
             b1.print();
-            numSolutions++;
          }
          else
          {
             cout << "\nNo solution found.\n";
          }
 
-         long long calls = b1.getRecursiveCalls();
+         long long calls = b1.getRecursiveCalls();   // get recursive count
          cout << "Recursive calls for this board: " << calls << endl;
 
-         totalCalls += calls;
-         boardCount++;
+         totalCalls += calls;   // add up recursion totals
+         boardCount++;          // increment number of boards
       }
 
+      // find the average number of calls
       long long averageCalls;
 
       if (boardCount > 0)
@@ -441,11 +449,9 @@ int main(int argc, char* argv[])
       else
           averageCalls = 0;
       
-      cout << "\n========================\n";
-      cout << "Total boards solved: " << boardCount << endl;
+      cout << "\nTotal boards solved: " << boardCount << endl;
       cout << "Total recursive calls: " << totalCalls << endl;
       cout << "Average recursive calls: " << averageCalls << endl;
-      cout << "========================\n";
    }
    catch (indexRangeError& ex)
    {
