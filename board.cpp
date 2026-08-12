@@ -370,7 +370,7 @@ long long board::getRecursiveCalls() const
 // For this program we'll use c-style arguments to pass sudoku board file name
 int main(int argc, char* argv[])
 {
-   if (argc == 0) 
+   if (argc < 2) 
    {
       cerr << "Must Supply a File Path" << endl;
       exit(1);
