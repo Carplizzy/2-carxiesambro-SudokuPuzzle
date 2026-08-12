@@ -1,7 +1,7 @@
-# 2-carxiesambro-SudokuPuzzle Part A
+# 2-carxiesambro-SudokuPuzzle Part B
 ## Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 
-## Sudoku Puzzle Part A Project Description
+## Sudoku Puzzle Part B Project Description
 This project implements the foundation for a Sudoku puzzle solver. The program
 reads Sudoku puzzles from an input file, stores the puzzle in a 9x9 board,
 maintains row, column and 3x3 square conflict information using the Improved
