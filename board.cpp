@@ -3,11 +3,11 @@
 // Implementation file for the Sudoku board class. Read Sudoku puzzles from an
 // input file, stores the board, maintains row, column and 3x3 square conflict
 // information using the Improved Conflict Counts Approach, prints the board
-// and conflicts, and checks whether the board is solved. It implements a
-// recursive backtracking solver that uses recursive backtracking to locate
-// blank cells and check legal digit placement using conflict matrices. The
-// solver counts all recursive calls, prints each solved puzzle, and reports
-// the total and average recursion counts across all puzzles in the input file.
+// and conflict data. It implements a recursive backtracking solver that uses
+// recursive backtracking to locate blank cells and check legal digit placement
+// using conflict matrices. The solver counts all recursive calls, prints each
+// solved puzzle, and reports the total and average recursion counts across all
+// puzzles in the input file.
 // The solver finds exactly one solution and does not use exit. 
 
 // Declarations and functions for project #4
