@@ -2,10 +2,14 @@
 ## Team: Elizabeth Carpenter, Sophie Xie, Vyrakaknyka Sambo, Seth Brown
 
 ## Sudoku Puzzle Part B Project Description
-This project extends the foundation for a Sudoku puzzle solver by implementing a complete recursive backtracking solution. The program reads Sudoku puzzles from an input file, stores the puzzle in a 9x9 board,
-maintains row, column and 3x3 square conflict information using the Improved
-Conflict Counts Approach, prints the board and conflicts. It also checks whether
-the puzzle has been solved.
+This project extends the foundation for a Sudoku puzzle solver by implementing a complete recursive 
+backtracking solution. The program reads Sudoku puzzles from an input file, stores the puzzle in a 
+9x9 board, and maintains row, column and 3x3 square conflict information using the Improved
+Conflict Counts Approach. It prints the board and conflict data, locates blank cells, and checks 
+legal digit placement. The solver uses recursive backtracking to fill in all empty cells, counts 
+every recursive call made during the solving process, prints each fully solved puzzle, and reports 
+both the total and average recursion counts across all puzzles. The solver is designed to find 
+exactly one valid solution for each puzzle without using exit.
 
 ## Build Instructions 
 Compile the project using: 
