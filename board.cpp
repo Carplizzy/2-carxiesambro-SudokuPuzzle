@@ -14,6 +14,7 @@
 
 #include "d_except.h"
 #include "d_matrix.h"
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <limits.h>
@@ -400,7 +401,14 @@ int main(int argc, char* argv[])
          b1.printConflicts();
 
          cout << "\nSolving...\n";
+
+         auto start_time = std::chrono::high_resolution_clock::now();
+
          bool solved = b1.solve();
+
+         auto end_time = std::chrono::high_resolution_clock::now();
+         double elapsed_time = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+         cout << "Sudoku Solver Execution took " << elapsed_time << " seconds" << std::endl;
 
          if(solved)
          {
