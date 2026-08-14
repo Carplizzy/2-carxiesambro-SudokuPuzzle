@@ -286,21 +286,57 @@ void board::printConflicts()
 }
 
 bool board::findNextBlank(int &i, int &j)
+// Find the cell with the least legal canidates to reduce recursive calls
 {
-   // scan every cell on the board
-   for(i = 1; i <=BoardSize; i++)
+   //used to track the best cell found
+   int bestI = -1, bestJ = -1;
+   //track the number possible canidates at the least constrained cell found
+   int bestCount = MaxValue + 1;
+
+   //Scan every cell on the board, row by row the through each column
+   for (int r = 1; r <= BoardSize; r++)
    {
-      for(j = 1; j <= BoardSize; j++)
+      for (int c = 1; c <= BoardSize; c++)
       {
-         // return first blank cell found
-         if(isBlank(i, j))
+         //skip cell that already are filled
+         if (!isBlank(r, c))
+            continue;
+
+         //count number of legal canidated for the cell   
+         int count = 0;
+         for (int val = MinValue; val <= MaxValue; val++)
+            if (isLegal(r, c, val))
+               count++;
+         //if there are 0 legal canidated fail
+         if (count == 0)
          {
-            return true;
+            i = r;
+            j = c;
+            return true; // dead end — report immediately
          }
-      }
-   }
-  
-   return false; // no blanks left on board
+
+         //if the cell has the least legal options set as next cell
+         if (count < bestCount)
+         {
+            bestCount = count;
+            bestI = r; bestJ = c;
+            //if only one legal option immediatly choose, otherwise continue looking for least constrained cell
+            if (bestCount == 1)
+            {
+               i = bestI; j = bestJ;
+               return true; // can't do better than 1 candidate
+            }
+         }
+      } //column end
+   } //row end
+   //finished going through each cell
+
+   if (bestI == -1)
+      return false; // no blanks left — solved
+
+   i = bestI;
+   j = bestJ;
+   return true;
 }
 
 bool board::isLegal(int i, int j, ValueType val)
@@ -397,9 +433,6 @@ int main(int argc, char* argv[])
          cout << "\nInitial Board:\n";
          b1.print();
 
-         cout << "\nConflicts:\n";
-         b1.printConflicts();
-
          cout << "\nSolving...\n";
 
          auto start_time = std::chrono::high_resolution_clock::now();
@@ -428,16 +461,15 @@ int main(int argc, char* argv[])
       }
 
       // find the average number of calls
-      long long averageCalls;
+      double averageCalls;
 
       if (boardCount > 0)
-          averageCalls = totalCalls / boardCount;
+          averageCalls = static_cast<double>(totalCalls) / boardCount;
       else
-          averageCalls = 0;
-      
+          averageCalls = 0.0; 
       cout << "\nTotal boards solved: " << boardCount << endl;
       cout << "Total recursive calls: " << totalCalls << endl;
-      cout << "Average recursive calls: " << averageCalls << endl;
+      cout << "Average recursive calls: " << averageCalls << endl;  
    }
    catch (indexRangeError& ex)
    {
@@ -445,5 +477,3 @@ int main(int argc, char* argv[])
       exit(1);
    }
 }
-
-
